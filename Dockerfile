@@ -12,5 +12,9 @@ COPY app.py .
 # Expose port
 EXPOSE 8080
 
-# Run application
-CMD ["python", "app.py"]
+# Set environment variables
+ENV PORT=8080
+ENV TMPDIR=/tmp
+
+# Start application (must read PORT env var)
+CMD ["gunicorn", "--bind", "0.0.0.0:$PORT", "--worker-tmp-dir=/tmp", "app:app"]

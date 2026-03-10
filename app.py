@@ -3,8 +3,13 @@ TaskMaster
 A simple task management application to keep track of daily tasks with due dates.
 """
 import os
+import sys
 import logging
 from flask import Flask, jsonify, request
+
+# Set temp directory to /tmp
+import tempfile
+tempfile.tempdir = '/tmp'
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
@@ -59,8 +64,9 @@ def health():
         with conn.cursor() as cur:
             cur.execute('SELECT 1')
         conn.close()
-        return jsonify({"status": "healthy", "database": "connected"})
+        return jsonify({"status": "healthy"})
     except Exception as e:
+        logger.error(f"Health check failed: {e}")
         return jsonify({"status": "unhealthy", "error": str(e)}), 500
 
 @app.route('/items', methods=['GET'])
