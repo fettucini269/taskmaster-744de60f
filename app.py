@@ -22,8 +22,10 @@ app = Flask(__name__)
 def get_db_connection():
     """Get database connection."""
     database_url = os.environ.get('DATABASE_URL')
+    sslmode = os.environ.get('DB_SSLMODE', 'disable')  # Default to disable SSL
+
     if database_url:
-        return psycopg2.connect(database_url, cursor_factory=RealDictCursor)
+        return psycopg2.connect(f"{database_url}?sslmode={sslmode}", cursor_factory=RealDictCursor)
     else:
         return psycopg2.connect(
             host=os.environ.get('DB_HOST', 'localhost'),
@@ -31,6 +33,7 @@ def get_db_connection():
             dbname=os.environ.get('DB_NAME', 'app'),
             user=os.environ.get('DB_USER', 'postgres'),
             password=os.environ.get('DB_PASSWORD', 'postgres'),
+            sslmode=sslmode,
             cursor_factory=RealDictCursor
         )
 
