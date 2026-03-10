@@ -13,8 +13,8 @@ tempfile.tempdir = '/tmp'
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
+# Configure logging to stdout
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
